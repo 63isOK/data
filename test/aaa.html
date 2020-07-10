@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav {
+            margin: 0 auto;
+            height: 200px;
+            width: 90vw;
+            background: #ff0000;
+            -webkit-user-select: none;
+            -webkit-app-region: drag;
+            -moz-user-select: none;
+            user-select: none;
+            margin-top: 20px;
+        }
+
+        .btns {
+            -webkit-app-region: no-drag;
+            position: absolute;
+            left: 56px;
+            top: 48px;
+        }
+        
+        textarea {
+            width: 500px;
+            min-height: 75px;
+        }
+    </style>
+    <script>
+        function reg()
+        {
+            document.getElementById("field2").value=window.Invoke(jsFunc,"main");
+        }
+        function add()
+        {
+            window.Invoke(3,0);
+        }
+        function jsFunc(msg){
+            console.log(msg)
+            var obj = JSON.parse(msg);
+            if (obj.hasOwnProperty("opcode") &&obj.opcode=="sdpAnswer"){
+                document.getElementById('remoteSessionDescriptiona').value = obj.audioSdpAnswer;
+                document.getElementById('remoteSessionDescriptionv').value = obj.videoSdpAnswer;
+                startSession();
+            }
+        }
+        function max(){
+            var obj = {
+                opcode: 'WindowMax'
+            }
+            window.Invoke(JSON.stringify(obj));
+        }
+        function min(){
+            window.Invoke("{\"opcode\":\"WindowMin\"}");
+        }
+        function restore(){
+            window.Invoke("{\"opcode\":\"WindowReStore\"}");
+        }
+        function wtop(){
+            window.Invoke("{\"opcode\":\"WindowTop\"}");
+        }
+        function nottop(){
+            window.Invoke("{\"opcode\":\"WindowNotTop\"}");
+        }
+        function hide(){
+            window.Invoke("{\"opcode\":\"WindowHide\"}");
+        }
+        function show(){
+            window.Invoke("{\"opcode\":\"WindowShow\"}");
+        }
+        function move(x, y, width, height){
+            var obj = {
+                opcode: 'WindowMove',
+                param:{
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height
+                }
+            }
+            return window.Invoke(JSON.stringify(obj));
+        }
+        function create(){
+            var obj = {
+                opcode: 'WindowCreate',
+                param:{
+                    url: "file:///b.html"
+                    //url: "http://www.baidu.com"
+                }
+            }
+            return window.Invoke(JSON.stringify(obj));
+        }
+        function createnew(){
+            obj.target="_blank";
+            obj.href = "file:///b.html";
+            obj.click();
+            // var obj = {
+            //     opcode: 'WindowCreate',
+            //     param:{
+            //         url: "file:///b.html"
+            //         //url: "http://www.baidu.com"
+            //     }
+            // }
+            // return window.Invoke(JSON.stringify(obj));
+        }
+        function killapp(){
+            window.Invoke("{\"opcode\":\"AppClose\"}");
+        }
+        function setkv(k,v){
+            var obj = {
+                opcode: 'SetKV',
+                param:{
+                    key: k,
+                    value: v
+                }
+            }
+            return window.Invoke(JSON.stringify(obj));
+        }
+        function getkv(k){
+            var obj = {
+                opcode: 'GetKV',
+                param:{
+                    key: k
+                }
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function exec(){
+            var obj = {
+                opcode: 'Exec',
+                param:{
+                    cmd: "Top.exe",
+                    params:"--help"
+                }
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function send(){
+            var obj = {
+                opcode: 'SendMessage',
+                message: '{"from":"main"}',
+                to: 'bb'
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function sendrtmp(){
+            var obj = {
+                opcode: 'SendRTMPMessage',
+                message: '{ "opid":	"E829EF26-BBF4-4061-9D64-FFF1C8B2D925", "opcode":	"pushstream", "params":	[{ "rtmp":	"d:\\\\1.mp4", "screen":	"1", "microphone":	"0", "speaker":	"0",  "screenparams":	[{ "name":	"ZGVza3RvcA==", "width":"1600", "height":	"900", "frame":	"25", "bitrate":"2000" }]}]}'
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function urlParams(){
+            var searchParams;
+            if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+                searchParams = new URLSearchParams(this.location.search.substring(1, this.location.search.length));
+            }
+            return searchParams;
+        }
+        function load(){
+            // console.log(urlParams().get('a'))
+            // console.log(urlParams().get('b'))
+            // console.log(urlParams().get('c'))
+        }
+        
+        /* eslint-env browser */
+        
+        // for video
+        let pc = new RTCPeerConnection({
+          iceServers: [
+            {
+              urls: 'stun:stun.l.google.com:19302'
+            }
+          ]
+        })
+        let log = msg => {
+          document.getElementById('div').innerHTML += msg + '<br>'
+        }
+
+        pc.ontrack = function (event) {
+          var el = document.createElement(event.track.kind)
+          el.srcObject = event.streams[0]
+          el.autoplay = true
+          el.controls = true
+
+          document.getElementById('remoteVideos').appendChild(el)
+        }
+
+        pc.oniceconnectionstatechange = e => log(pc.iceConnectionState)
+        pc.onicecandidate = event => {
+          if (event.candidate === null) {
+            document.getElementById('localSessionDescriptionv').value = btoa(JSON.stringify(pc.localDescription))
+          }
+        }
+
+        pc.addTransceiver('video', {'direction': 'recvonly'})
+        pc.createOffer().then(d => pc.setLocalDescription(d)).catch(log)
+        
+        // for audio
+        let pca = new RTCPeerConnection({
+          iceServers: [
+            {
+              urls: 'stun:stun.l.google.com:19302'
+            }
+          ]
+        })
+        let loga = msg => {
+          document.getElementById('diva').innerHTML += msg + '<br>'
+        }
+
+        pca.ontrack = function (event) {
+          var el = document.createElement(event.track.kind)
+          el.srcObject = event.streams[0]
+          el.autoplay = true
+          el.controls = true
+
+          document.getElementById('remoteVideos').appendChild(el)
+        }
+
+        pca.oniceconnectionstatechange = e => loga(pca.iceConnectionState)
+        pca.onicecandidate = event => {
+          if (event.candidate === null) {
+            document.getElementById('localSessionDescriptiona').value = btoa(JSON.stringify(pca.localDescription))
+          }
+        }
+
+        pca.addTransceiver('audio', {'direction': 'recvonly'})
+        pca.createOffer().then(d => pca.setLocalDescription(d)).catch(loga)
+
+        startSession = () => {
+          let sdv = document.getElementById('remoteSessionDescriptionv').value
+          let sda = document.getElementById('remoteSessionDescriptiona').value
+          if (sdv === '' || sda === '') {
+            return alert('Session Description must not be empty')
+          }
+
+          try {
+            pc.setRemoteDescription(new RTCSessionDescription(JSON.parse(atob(sdv))))
+            pca.setRemoteDescription(new RTCSessionDescription(JSON.parse(atob(sda))))
+          } catch (e) {
+            alert(e)
+          }
+        }
+        function sendrtp(){
+            var obj = {
+                opcode: 'SendRTPMessage',
+                message: '{"opid": "E829EF26-BBF4-4061-9D64-FFF1C8B2D925","opcode": "rtppushstream","params": [{"file":	"ZDpcXDIubXA0","videortp": "rtp://127.0.0.1:5004","audiortp": "rtp://127.0.0.1:5006","videoparams":	[{"width": "1920","height": "1080","frame": "25","bitrate": "2000"}] }]}',
+                AudioSdpOffer: document.getElementById('localSessionDescriptiona').value,
+                VideoSdpOffer: document.getElementById('localSessionDescriptionv').value
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function stoprtp(){
+            var obj = {
+                opcode: 'SendRTPMessageStop',
+                message: '{"opid":"E829EF26-BBF4-4061-9D64-FFF1C8B2D925","opcode":"rtpstopstream"}'
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function pausertp(){
+            var obj = {
+                opcode: 'SendRTPMessagePause',
+                message: '{"opid":"E829EF26-BBF4-4061-9D64-FFF1C8B2D925","opcode":"rtppausestream"}'
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+        function resumertp(){
+            var obj = {
+                opcode: 'SendRTPMessagePlay',
+                message: '{"opid":"E829EF26-BBF4-4061-9D64-FFF1C8B2D925","opcode":"rtpresumestream"}'
+            }
+            return console.log(window.Invoke(JSON.stringify(obj)));
+        }
+    </script>
+</head>
+<body onload="load()">
+    AAAAA
+    <div class="nav"><div class="btns"><button onclick="alert('Close Action')">x</button></div></div>
+    <div><a href="file:///D:/workspaces/cef/cef3729/build/tests/cefclient/Debug/b.html" target="_blank">链接文本</a></div>
+    <button onclick="reg()">回调注册</button>
+    Field2: <input type="text" id="field2"><br><br>
+    <button onclick="add()">数值累计</button>
+    <button onclick="max()">最大化</button>
+    <button onclick="min()">最小化</button>
+    <button onclick="restore()">还原</button>
+    <button onclick="wtop()">top</button>
+    <button onclick="nottop()">not top</button>
+    <button onclick="hide()">hide</button>
+    <button onclick="move(0, 0, 0, 0)">移到(0,0)</button>
+    <button onclick="move(0, 0, 800, 600)">修改宽高:800x600</button>
+    <button onclick="move(0, 0, 400, 300)">修改宽高:400x300</button>
+    <button onclick="move(50, 50, 0, 0)">修改位置:50,50</button>
+    <button onclick="move(100, 100, 0, 0)">修改位置:100,100</button>
+    <button onclick="create()">创建b窗口</button>
+    <button onclick="javascript:window.open='b.html';">创建b窗口-新方式</button>
+    <input type=button onclick="window.open('b.html')" value="按钮">
+    <button onclick="killapp()">关闭程序</button>
+    <button onclick='setkv("12", "34")'>保存一个值12:34</button>
+    <button onclick='setkv("12", "45")'>保存一个值12:45</button>
+    <button onclick='setkv("123", "45")'>保存一个值123:45</button>
+    <button onclick='setkv("125", "45")'>保存一个值125:45</button>
+    <button onclick='setkv("12", "34")'>保存一个值12:34</button>
+    <button onclick='getkv("12")'>获取key为12的value</button>
+    <button onclick='exec()'>调用top.exe</button>
+    <button onclick='send()'>发送消息给其他窗口</button>
+    <button onclick='sendrtmp()'>发送消息给rtmp模块</button>
+    <div>
+        Browser base64 Session Description<br />
+        <textarea id="localSessionDescriptionv" readonly="true"></textarea>
+        <textarea id="localSessionDescriptiona" readonly="true"></textarea>
+        <br />
+
+        Golang base64 Session Description<br />
+        <textarea id="remoteSessionDescriptionv"> </textarea> <br/>
+        <textarea id="remoteSessionDescriptiona"> </textarea> <br/>
+        Auto Start Session<br />
+        <br />
+
+        Video<br />
+        <div id="remoteVideos"></div> <br />
+
+        Logs<br />
+        <div id="div"></div>
+        <div id="diva"></div>
+        <button onclick='sendrtp()'>播放视频</button>
+        <button onclick='stoprtp()'>停止视频</button>
+        <button onclick='pausertp()'>暂停视频</button>
+        <button onclick='resumertp()'>恢复视频</button>
+    </div>
+</body>
+</html>
