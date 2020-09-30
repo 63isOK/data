@@ -1,0 +1,36 @@
+# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+#	127.0.0.1       localhost
+#	::1             localhost
+
+127.0.0.1       localhost
+
+151.101.76.133	raw.githubusercontent.com
+216.239.38.21   go.dev
+203.208.50.162  google.cn
+203.208.50.98   golang.google.cn
+216.58.200.243  pkg.go.dev
+203.208.43.65   fonts.googleapis.com
+203.208.39.233  www.googletagmanager.com
+203.208.50.97   www.google-analytics.com
+203.208.43.102  stats.g.doubleclick.net
+203.208.43.66   fonts.gstatic.com
+203.208.39.233  ssl.google-analytics.com
+
