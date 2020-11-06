@@ -1,0 +1,51 @@
+ffmpeg -re -i 3.mp4 -vn -c:a libopus  -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 3.mp4 -an -c:v libvpx -r 20 -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1   -f rtp rtp://127.0.0.1:5004
+
+ffmpeg  -re -i 5.mp4 -an -vcodec libvpx -r 20 -b:v 2000k -s 1280x720 -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5004 -vn -acodec libopus -f rtp rtp://127.0.0.1:5006
+
+ffmpeg  -re -i 5.mp4  -vn -acodec libopus -f rtp rtp://127.0.0.1:5006 -an -vcodec libvpx -r 20 -b:v 2000k -s 1280x720 -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 5.mp4 -an -s 1280x720 -r 30 -b:v 2000k -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 5.mp5 size=640x480:rate=30 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -i 5.mp4 -b:v 1000k -bufsize 1000k 2m5.mp4
+
+
+ffmpeg  -re -i 5.mp4  -vn -acodec libopus -f rtp rtp://127.0.0.1:5006 -an -vcodec copy -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 123.mp4 -vcodec libx264 -preset:v veryfast -tune:v zerolatency -b:v 1000k -minrate 1000k -maxrate 1000k -bufsize 2000k -r 20 -s 1280*720 -an -f rtp rtp://127.0.0.1:5004
+
+
+
+ffmpeg  -re -i 5.mp4  -vn -acodec libopus -f rtp rtp://127.0.0.1:5006 -an -vcodec libx264  -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re -i 121212.mp4 -vcodec libx264 -preset:v veryfast -tune:v zerolatency -b:v 1000k -minrate 1000k -maxrate 1000k -bufsize 2000k -r 20 -s 1280*720 -an -f rtp rtp://127.0.0.1:5004 -vn -acodec libopus -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 5.mp4 -vcodec libx264 -preset:v veryfast -tune:v zerolatency -an -f rtp rtp://127.0.0.1:5004 -vn -acodec libopus -f rtp rtp://127.0.0.1:5006
+
+ffmpeg -re -i 5.mp4 -vcodec libx264 -preset:v veryfast -tune:v zerolatency -payload_type 102 -profile:v baseline -level 3.1 -an -f rtp rtp://127.0.0.1:5006 -vn -acodec libopus -f rtp rtp://127.0.0.1:5006
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

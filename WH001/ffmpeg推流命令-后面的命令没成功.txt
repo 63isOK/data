@@ -1,0 +1,42 @@
+﻿只推视频成功:ffmpeg -re -f lavfi -i testsrc=size=640x480:rate=30 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5004
+
+只推音频成功:ffmpeg -re -vn -i a.ogg -acodec libopus -b:a 96k -f rtp rtp://127.0.0.1:5004
+
+
+只推音频需要修改js,不要创建video通道
+
+ffmpeg -re -f lavfi -i testsrc=size=1920x1080:rate=30 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -b 2000k -f rtp rtp://172.168.10.177:5004
+
+ffmpeg -re -f lavfi -i testsrc=size=1920x1080:rate=30 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -b 2000k -f rtp rtp://172.168.10.177:5004
+
+ffmpeg -re -i 1.flv -vcodec libvpx -an -s 1080x720 -b 2500k -r 20 -f rtp rtp://172.168.10.177:5004
+ffmpeg -re -i output.ivf -vcodec libvpx -an -s 1080x720 -b 1000k -r 20 -f rtp rtp://172.168.10.177:5004
+
+
+ffmpeg -re -i 1.mp4 -vcodec libvpx -b:v 1000k -r 20 -s 1280*720 -an -quality realtime -f rtp rtp://127.0.0.1:5004
+
+
+ffmpeg -re -f lavfi -i testsrc=size=1920*1080:rate=30 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -b 2000k -f rtp rtp://172.168.10.177:5004
+
+ffmpeg -re -i output.ifv -vcodec copy -b:v 1000k -r 20 -s 1280*720 -an -quality realtime -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re -i 123.mp4 -vcodec copy  -an -quality realtime -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re -i output.ivf -vcodec libvpx -an -s 1080*720 -b 1000k -r 20 -f rtp rtp://127.0.0.1:5004
+
+
+
+
+ffmpeg -re -i 1.mp4 -vcodec libvpx  -an -quality realtime -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re -i 1.mp4 -vcodec libvpx -b:v 1000k -r 20 -s 1280*720 -an -quality realtime -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re  -i 1.mp4 -vcodec libvpx -cpu-used 5 -deadline 1 -g 10 -error-resilient 1 -auto-alt-ref 1 -f rtp rtp://127.0.0.1:5004
+
+
+ffmpeg -re  -i 1.mp4 -vcodec libvpx -s 1920x1080 -b:v 10000k -r 30 -cpu-used 1 -deadline realtime -g 10 -error-resilient 1 -auto-alt-ref 1  -an -f rtp rtp://127.0.0.1:5004
+
+
+ffmpeg -re  -i 123.mp4 -vcodec libvpx -s 1920x1080 -b:v 5000k -r 30 -deadline realtime -g 10 -error-resilient 1 -auto-alt-ref 1  -an -f rtp rtp://127.0.0.1:5004
+
+ffmpeg -re  -i 2.mp4 -vcodec libx264 -s 1280x720 -b:v 30000k -r 30 -deadline realtime -g 10 -error-resilient 1 -auto-alt-ref 1  -an -f rtp rtp://127.0.0.1:5004
