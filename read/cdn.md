@@ -418,3 +418,19 @@ CDN可归类为负载均衡集群.
 	- 通信协议:icp/htcp/cache digest/ cache pre-filling
 - 紧耦合
 	- 通信协议:carp
+
+### 协同交互协议
+
+ICP, internet cache protocol,互联网缓存协议,
+一般基于udp使用,不包含http头,也存在cache失效的情况.
+
+HTCP, hypertext caching protocol, 超文本缓存协议,
+带http头.不用密码认证易受到攻击.
+
+cache digest,为了解决icp/htcp的网络延时和拥塞问题.
+每个cache都保存其他邻居的所有缓存信息摘要.
+
+cache pre-filling,是一种推送缓存内容的机制.
+
+carp, cache array routing protocol,分布式缓存协议.
+有个hash算法可以准备定位服务器阵列中的缓存内容
