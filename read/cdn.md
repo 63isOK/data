@@ -229,3 +229,55 @@ idc/icp/isp区分:
 
 - http基本功能
 - 具体应用场景和工作模式下,需要达到不同的性能指标
+
+### web cache的实现基础
+
+从技术上将,web架构的精华有3点:
+
+- html,实现信息与信息的连接
+- uri, 实现全球信息的精确定位
+- http, 实现分布式信息共享
+
+http工作原理:
+
+- http基于tcp,https还会经过tls/ssl封装
+- http不必担心数据丢失,也不用考虑丢失重传之后的乱序
+- http是无状态的,即服务端不会存客户端请求的状态信息
+	- 基于这点,http 1.0是短连接
+	- 1.0 连接时的三次握手
+		- client: syn
+		- server: syn ack
+		- client: ack
+	- 1.0 接收时的消息
+		- server: fin
+		- client: ack
+		- client: fin
+		- server: ack
+- http 1.1 在三次握手之后,可持续交换数据,减少了1.0的网络浪费
+	- 如果http 1.1不想使用长连接,可在http头的Connection设置为close
+
+http协议分析:
+
+- http是标准的request-response协议
+- 其他部分可参数书本
+
+http的几个关键应用:cookie/session/安全协议/cache.
+
+web cache缓存的原则:
+
+- http response头,告诉cache不保存副本,cache就不缓存相应内容
+- 如果亲求信息需要源站认证或涉及安全协议,相应内容就不会被缓存
+- 如果缓存内容有一下信息,则认为信息是新的,不向源站重新获取:
+	- 有过期时间,且没有过期
+	- 缓存内容近期提供过服务,且更新时间比最近使用时间久很多
+- 如果缓存内容过期,cache会向源站发送验证信息,确定内容是否还可用
+- 特殊情况(eg:断网),cache内容可用
+- 如果response头中不存在判断内容是否变化的值,也没有新鲜度信息,则内容通常不会被缓存
+
+控制内容是否缓存的方法:
+
+- html meta标签;http头信息
+- http头信息中的Expires,过期时间
+- 验证(http 1.1中提出的概念)
+- http头信息中的缓存控制 Cache-Control
+- http头信息中的通用头,Pragma
