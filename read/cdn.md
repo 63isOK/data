@@ -434,3 +434,45 @@ cache pre-filling,是一种推送缓存内容的机制.
 
 carp, cache array routing protocol,分布式缓存协议.
 有个hash算法可以准备定位服务器阵列中的缓存内容
+
+### 负载均衡
+
+server load balance, 负载均衡.
+
+依据目的,负载均衡分两种:
+
+- 任务分担
+- 协同计算
+
+负载均衡之前以OSI七层网络协议栈的第4层展开,
+现在主要以第七层展开. L4-7.
+
+负载均衡关键技术:
+
+- 负载均衡调度算法
+	- 静态算法
+		- 轮询
+		- 加权轮询
+		- 随机
+		- 加权随机
+		- 基于源ip的hash
+		- 基于源ip端口的hash
+		- 基于目的ip的hash
+		- 基于udp报文payload的hash
+	- 动态算法
+		- 基于最小连接
+		- 就加权最小连接
+		- 最小响应时间
+- 会话连续性保持
+	- 基于源ip地址的连续性保持
+	- 基于cookie数据的连续性保持
+	- 基于sip报文call-id的连续性保持
+	- 基于http报文头的连续性保持
+- 服务器健康检测
+	- ICMP
+	- TCP
+	- HTTP
+	- FTP
+	- DNS
+	- RADIUS
+	- SSL
