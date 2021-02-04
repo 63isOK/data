@@ -20,17 +20,23 @@
 #	127.0.0.1       localhost
 #	::1             localhost
 
-127.0.0.1       localhost
-
-151.101.76.133	raw.githubusercontent.com
-216.239.38.21   go.dev
-203.208.50.162  google.cn
-203.208.50.98   golang.google.cn
-216.58.200.243  pkg.go.dev
-203.208.43.65   fonts.googleapis.com
-203.208.39.233  www.googletagmanager.com
-203.208.50.97   www.google-analytics.com
-203.208.43.102  stats.g.doubleclick.net
-203.208.43.66   fonts.gstatic.com
-203.208.39.233  ssl.google-analytics.com
-
+4.31.198.44			datatracker.ietf.org
+64.13.192.76		www.slideshare.net
+172.217.24.14 	webrtc.org
+108.160.166.148 scratch.mit.edu
+151.101.88.133  raw.githubusercontent.com
+151.101.108.133 avatars1.githubusercontent.com
+151.101.228.133 avatars2.githubusercontent.com
+151.101.228.133 avatars3.githubusercontent.com
+151.101.228.133 camo.githubusercontent.com
+192.198.165.191 webrtc.intel.com
+104.27.172.123  webrtcglossary.com
+209.197.3.24    code.jquery.com
+23.21.45.31     www.slideshare.net
+13.229.188.59   gist.github.com
+192.0.47.8			www.iana.org
+13.114.40.48    github.com
+13.250.177.223  github.com
+151.101.1.195   dart.dev
+151.101.65.195  flutter.dev
+104.26.8.187    sourcegraph.com
